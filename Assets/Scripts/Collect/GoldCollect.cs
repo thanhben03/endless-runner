@@ -9,8 +9,9 @@ public class GoldCollect : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             PlayerDataManager.Instance.AddGold();
+            ScoreManager.Instance.AddItemScore(100);
             AudioManager.Instance.PlaySoundCointCollect();
-            Destroy(gameObject, 2f);
+            Destroy(gameObject, 1f);
         }
     }
 }

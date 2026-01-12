@@ -57,6 +57,8 @@ public class PlayerDataManager : MonoBehaviour
     public void UpdateDistance(int newDis)
     {
         distance += newDis;
+        // gui distance de tinh toan score
+        ScoreManager.Instance.UpdateDistanceScore(distance);
         OnDistanceChanged?.Invoke(distance);
     }
 }

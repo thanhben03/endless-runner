@@ -10,12 +10,14 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI goldText;
 
     public TextMeshProUGUI distanceText;
+    public TextMeshProUGUI scoreText;
 
     private void Start()
     {
         PlayerDataManager.Instance.OnCointChanged += UpdateUICoint;
         PlayerDataManager.Instance.OnGoldChanged += UpdateUIGold;
         PlayerDataManager.Instance.OnDistanceChanged += UpdateUIDistance;
+        ScoreManager.Instance.OnScoreChanged += UpdateUIScore;
     }
 
     private void Awake()
@@ -44,5 +46,10 @@ public class UIManager : MonoBehaviour
     public void UpdateUIDistance(int distance)
     {
         distanceText.text = distance + "m";
+    }
+
+    public void UpdateUIScore(int score)
+    {
+        scoreText.text = "Score: " + score;
     }
 }
