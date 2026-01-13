@@ -5,6 +5,7 @@ using UnityEngine;
 public class CointCollect : MonoBehaviour
 {
     public AudioClip cointCollectSound;
+    public ParticleSystem cointCollectEff;
    
     private void OnTriggerEnter(Collider other)
     {
@@ -13,7 +14,8 @@ public class CointCollect : MonoBehaviour
             AudioManager.Instance.PlaySoundCointCollect();
             PlayerDataManager.Instance.AddCoint(1);
             ScoreManager.Instance.AddItemScore(2);
-            Destroy(gameObject);
+            cointCollectEff.Play();
+            Destroy(gameObject, 0.2f);
         }
     }
 }

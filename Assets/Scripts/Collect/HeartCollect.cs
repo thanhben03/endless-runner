@@ -10,6 +10,7 @@ public class HeartCollect : MonoBehaviour
         {
             PlayerDataManager.Instance.AddHeath();
             AudioManager.Instance.PlaySoundHeartCollect();
+            Destroy(gameObject);
         }
     }
 }

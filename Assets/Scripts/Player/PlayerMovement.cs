@@ -55,16 +55,18 @@ public class PlayerMovement : MonoBehaviour
 
     void HandleInput()
     {
-        if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+        var input = InputManager.Instance;
+
+        if (input.SwipeLeft)
             ChangeLane(-1);
 
-        if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
+        if (input.SwipeRight)
             ChangeLane(1);
 
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (input.SwipeUp)
             Jump();
 
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        if (input.SwipeDown)
             StartCoroutine(Slide());
     }
 
