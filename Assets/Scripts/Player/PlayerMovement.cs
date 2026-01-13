@@ -26,16 +26,29 @@ public class PlayerMovement : MonoBehaviour
     private float originalHeight;
     private Vector3 originalCenter;
 
+    public bool canMove = false;
+
     void Start()
     {
         controller = GetComponent<CharacterController>();
-
         originalHeight = controller.height;
         originalCenter = controller.center;
     }
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+            PowerUpManager.Instance.Activate(PowerUpType.Magnet);
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+            PowerUpManager.Instance.Activate(PowerUpType.Invincible);
+
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+            PowerUpManager.Instance.Activate(PowerUpType.DoubleScore);
+        if (!canMove)
+        {
+            return;
+        }
         HandleInput();
         Move();
     }

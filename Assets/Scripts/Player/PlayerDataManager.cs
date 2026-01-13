@@ -6,11 +6,18 @@ using UnityEngine;
 public class PlayerDataManager : MonoBehaviour
 {
     public static PlayerDataManager Instance { get; private set; }
-    public static int coint;
-    public static int gold;
-    public static int healh = 3;
-    public static int distance = 0;
-    public event Action<int> OnCointChanged;
+
+    [SerializeField] private int coin;
+    [SerializeField] private int gold;
+    [SerializeField] private int health;
+    [SerializeField] private int distance;
+
+    public int Coin => coin;
+    public int Gold => gold;
+    public int Health => health;
+    public int Distance => distance;
+
+    public event Action<int> OnCoinChanged;
     public event Action<int> OnGoldChanged;
 
     public event Action<int> OnHitDamaged;
@@ -19,10 +26,11 @@ public class PlayerDataManager : MonoBehaviour
 
     private void Awake()
     {
+        ResetPlayerData();
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -32,20 +40,20 @@ public class PlayerDataManager : MonoBehaviour
 
     public void AddCoint(int num)
     {
-        coint += num;
-        OnCointChanged?.Invoke(coint);
+        coin += num;
+        OnCoinChanged?.Invoke(coin);
     }
 
     public void HitDamage(int damage)
     {
-        healh -= damage;
-        OnHitDamaged?.Invoke(healh);
+        health -= damage;
+        OnHitDamaged?.Invoke(health);
     }
 
     public void AddHeath()
     {
-        healh++;
-        OnHealthChanged?.Invoke(healh);
+        health++;
+        OnHealthChanged?.Invoke(health);
     }
 
     public void AddGold()
@@ -61,4 +69,18 @@ public class PlayerDataManager : MonoBehaviour
         ScoreManager.Instance.UpdateDistanceScore(distance);
         OnDistanceChanged?.Invoke(distance);
     }
+
+    public void ResetPlayerData()
+    {
+        coin = 0;
+        gold = 0;
+        health = 3;
+        distance = 0;
+
+        OnCoinChanged?.Invoke(coin);
+        OnGoldChanged?.Invoke(gold);
+        OnHealthChanged?.Invoke(health);
+        OnDistanceChanged?.Invoke(distance);
+    }
+
 }

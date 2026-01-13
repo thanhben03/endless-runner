@@ -55,6 +55,10 @@ MonoBehaviour:
     m_Address: Assets/Prefabs/UI/Score.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: fcfef495bf908da4f906b2abac806168
+    m_Address: Assets/Materials/WheelyBin.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 735e874f947d0e143a6b4e83f8a7283a, type: 2}
   m_SchemaSet:

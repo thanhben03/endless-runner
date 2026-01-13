@@ -12,11 +12,22 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI distanceText;
     public TextMeshProUGUI scoreText;
 
+    public GameObject pauseMenu;
+    public GameObject deathMenu;
+    public GameObject countDown;
+    public GameObject powerUpProgressBar;
+
+    public TextMeshProUGUI cointResultText;
+    public TextMeshProUGUI goldResultText;
+    public TextMeshProUGUI scoreResultText;
+    public TextMeshProUGUI distanceResultText;
+
     private void Start()
     {
-        PlayerDataManager.Instance.OnCointChanged += UpdateUICoint;
+        PlayerDataManager.Instance.OnCoinChanged += UpdateUICoint;
         PlayerDataManager.Instance.OnGoldChanged += UpdateUIGold;
         PlayerDataManager.Instance.OnDistanceChanged += UpdateUIDistance;
+        PlayerDataManager.Instance.OnHitDamaged += UpdateUIResultDeath;
         ScoreManager.Instance.OnScoreChanged += UpdateUIScore;
     }
 
@@ -25,7 +36,7 @@ public class UIManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -52,4 +63,23 @@ public class UIManager : MonoBehaviour
     {
         scoreText.text = "Score: " + score;
     }
+
+    public void UpdateUIResultDeath(int health)
+    {
+        if (health > 0)
+        {
+            return;
+        }
+        deathMenu.SetActive(true);
+        cointResultText.text = PlayerDataManager.Instance.Coin.ToString();
+        goldResultText.text = PlayerDataManager.Instance.Gold.ToString();
+        scoreResultText.text = "Score: " + ScoreManager.Instance.TotalScore;
+        distanceResultText.text = "Distance: " + PlayerDataManager.Instance.Distance;
+    }
+
+    public void UpdateUIPowerUpProgressBar()
+    {
+
+    }
+
 }

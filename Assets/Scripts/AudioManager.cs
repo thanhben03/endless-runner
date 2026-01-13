@@ -8,6 +8,8 @@ public class AudioManager : MonoBehaviour
     public AudioClip slapHurt;
     public AudioClip cointCollect;
     public AudioClip heartAlert;
+    public AudioClip countdown;
+
     public AudioSource audioSource;
 
     private void Awake()
@@ -36,6 +38,11 @@ public class AudioManager : MonoBehaviour
     public void PlaySoundHeartCollect ()
     {
         audioSource.PlayOneShot(heartAlert);
+    }
+
+    public void PlaySoundCountDown()
+    {
+        audioSource.PlayOneShot(countdown);
     }
 
 }

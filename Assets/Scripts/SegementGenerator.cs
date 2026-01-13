@@ -5,7 +5,7 @@ using UnityEngine;
 public class SegementGenerator : MonoBehaviour
 {
     public GameObject[] segment;
-    [SerializeField] int zPos = 174;
+    [SerializeField] int zPos = 380;
     [SerializeField] bool creatingSegment = false;
     [SerializeField] int segmentNum = 0;
 
@@ -28,7 +28,7 @@ public class SegementGenerator : MonoBehaviour
         {
             segmentNum = 0;
         }
-        zPos += 58;
+        zPos += 107;
         yield return new WaitForSeconds(3);
         creatingSegment = false;
     }

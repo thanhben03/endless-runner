@@ -7,21 +7,25 @@ public class DistanceCounter : MonoBehaviour
     private float distance;
 
     private float timer;
-    private const float UPDATE_INTERVAL = 1f;
+    private const float UPDATE_INTERVAL = 3f;
+
+
+    private PlayerMovement playerMovement;
 
     void Start()
     {
         startZ = transform.position.z;
+        playerMovement = GamePlayManager.Instance.GetPlayer().GetComponent<PlayerMovement>();
     }
 
     void Update()
     {
-        distance = Mathf.Max(0, transform.position.z - startZ);
 
         timer += Time.deltaTime;
 
-        if (timer >= UPDATE_INTERVAL)
+        if (timer >= UPDATE_INTERVAL && playerMovement.forwardSpeed > 0)
         {
+            distance = Mathf.Max(0, transform.position.z - startZ ) / 3;
             timer = 0f;
 
             int roundedDistance = Mathf.FloorToInt(distance);

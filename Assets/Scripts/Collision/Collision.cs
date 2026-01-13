@@ -10,6 +10,11 @@ public abstract class Collision : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            Invincible invincible = other.GetComponentInChildren<Invincible>();
+            if (invincible != null && invincible.IsInvincible)
+            {
+                return;
+            }
             gameObject.GetComponent<BoxCollider>().enabled = false;
             AudioManager.Instance.PlaySoundSlapHurt();
             OnHit();

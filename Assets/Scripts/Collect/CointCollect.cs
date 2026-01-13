@@ -12,7 +12,7 @@ public class CointCollect : MonoBehaviour
         {
             AudioManager.Instance.PlaySoundCointCollect();
             PlayerDataManager.Instance.AddCoint(1);
-            ScoreManager.Instance.AddItemScore(25);
+            ScoreManager.Instance.AddItemScore(2);
             Destroy(gameObject);
         }
     }

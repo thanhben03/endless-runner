@@ -14,12 +14,24 @@ public class ScoreManager : MonoBehaviour
     public int itemMultiplier = 1;
     public event Action<int> OnScoreChanged;
 
+    private bool isDoubleScore = false;
+
     void Awake()
     {
         if (Instance == null)
             Instance = this;
         else
             Destroy(gameObject);
+    }
+
+    private void Start()
+    {
+        MultipleScore.Instance.OnDoubleScore += IsDoubleScore;
+    }
+
+    private void IsDoubleScore(bool status)
+    {
+        isDoubleScore = status;
     }
 
     public void UpdateDistanceScore(int distance)
@@ -30,6 +42,11 @@ public class ScoreManager : MonoBehaviour
 
     public void AddItemScore(int value)
     {
+        if (isDoubleScore)
+        {
+            value *= 2;
+            Debug.Log("Double Score");
+        }
         itemScore += value * itemMultiplier;
         CalculateTotalScore();
     }
