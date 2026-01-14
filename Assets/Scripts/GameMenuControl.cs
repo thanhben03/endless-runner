@@ -4,9 +4,23 @@ using UnityEngine.SceneManagement;
 
 public class GameMenuControl : MonoBehaviour
 {
-    
+    public static GameMenuControl Instance;
+
+    void Awake()
+    {
+
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else Destroy(gameObject);
+    }
+
+
     public void StartGame()
     {
+        Debug.Log("Start game");
         SceneManager.LoadScene("Run");
     }
 
@@ -25,7 +39,13 @@ public class GameMenuControl : MonoBehaviour
     public void LoadMainMenu ()
     {
         SceneManager.LoadScene("MainMenu");
-        UIManager.Instance.gameObject.SetActive(false);
+        //UIManager.Instance.gameObject.SetActive(false);
+    }
+
+    public void LoadShop()
+    {
+        SceneManager.LoadScene("Shop");
+
     }
 
 }

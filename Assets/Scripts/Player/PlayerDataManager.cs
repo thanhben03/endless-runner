@@ -38,7 +38,7 @@ public class PlayerDataManager : MonoBehaviour
         {
             LoadMetaData();
             Instance = this;
-            //DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -48,6 +48,8 @@ public class PlayerDataManager : MonoBehaviour
 
     void LoadMetaData()
     {
+        Debug.Log("LOAD META DATA: " + PlayerPrefs.GetInt("TOTAL_COIN"));
+
         totalCoin = PlayerPrefs.GetInt("TOTAL_COIN", 0);
         totalGold = PlayerPrefs.GetInt("TOTAL_GOLD", 0);
     }
@@ -105,6 +107,41 @@ public class PlayerDataManager : MonoBehaviour
         PlayerPrefs.SetInt("TOTAL_COIN", totalCoin);
         PlayerPrefs.SetInt("TOTAL_GOLD", totalGold);
         PlayerPrefs.Save();
+    }
+
+    public void MinusCoint(int amount)
+    {
+        totalCoin -= amount;
+        PlayerPrefs.SetInt("TOTAL_COIN", totalCoin);
+        PlayerPrefs.Save();
+    }
+
+    public void MinusGold(int amount)
+    {
+        totalGold -= amount;
+        PlayerPrefs.SetInt("TOTAL_GOLD", totalGold);
+        PlayerPrefs.Save();
+    }
+
+    public bool TrySpend(CurrencyType type, int amount)
+    {
+        switch (type)
+        {
+            case CurrencyType.Coin:
+                if (totalCoin < amount) return false;
+                totalCoin -= amount;
+                PlayerPrefs.SetInt("TOTAL_COIN", totalCoin);
+                break;
+
+            case CurrencyType.Gold:
+                if (totalGold < amount) return false;
+                totalGold -= amount;
+                PlayerPrefs.SetInt("TOTAL_GOLD", totalGold);
+                break;
+        }
+
+        PlayerPrefs.Save();
+        return true;
     }
 
 
