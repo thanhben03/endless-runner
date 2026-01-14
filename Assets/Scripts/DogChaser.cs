@@ -18,21 +18,25 @@ public class DogChaser : MonoBehaviour
 
     private Animator anim;
 
+    private bool isStart = false;
+
     void Start()
     {
         anim = GetComponent<Animator>();
-        anim.SetBool("Ready", true);
         currentDistance = maxDistance;
         targetDistance = maxDistance;
         lastPlayerPos = player.position;
+        PlayerDataManager.Instance.OnHitDamaged += PlayerHitDamage;
+        anim.SetBool("Ready", true);
 
     }
 
     void Update()
     {
         float delta = Vector3.Distance(player.position, lastPlayerPos);
-        if (delta > 0.01f)
+        if (delta > 0.01f && !isStart)
         {
+            isStart = true;
             anim.SetBool("Ready", false);
         }
         Vector3 targetPos =
@@ -63,5 +67,18 @@ public class DogChaser : MonoBehaviour
     public void DogFallBack()
     {
         targetDistance = maxDistance;
+    }
+
+    private void PlayerHitDamage(int health)
+    {
+        Debug.Log("Player Hit Damage on Dog chase: " + health);
+        if (health <= 0)
+        {
+            anim.SetBool("Ready", true);
+            catchUpSpeed = 0;
+            followSpeed = 0;
+
+            return;
+        }
     }
 }

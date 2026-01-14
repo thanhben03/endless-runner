@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
         mainCam.GetComponent<Animator>().SetTrigger("HitWall");
         if (health <= 0)
         {
-
+            PlayerDataManager.Instance.SaveAfterRun();
             gameObject.GetComponent<PlayerMovement>().enabled = false;
             gameObject.GetComponent<PlayerMovement>().forwardSpeed = 0f;
             anim.SetInteger("Died", 3);

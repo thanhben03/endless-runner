@@ -17,6 +17,13 @@ public class PlayerDataManager : MonoBehaviour
     public int Health => health;
     public int Distance => distance;
 
+    [SerializeField] private int totalCoin;
+    [SerializeField] private int totalGold;
+
+    public int TotalCoin => totalCoin;
+    public int TotalGold => totalGold;
+
+
     public event Action<int> OnCoinChanged;
     public event Action<int> OnGoldChanged;
 
@@ -29,6 +36,7 @@ public class PlayerDataManager : MonoBehaviour
         ResetPlayerData();
         if (Instance == null)
         {
+            LoadMetaData();
             Instance = this;
             //DontDestroyOnLoad(gameObject);
         }
@@ -36,6 +44,12 @@ public class PlayerDataManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    void LoadMetaData()
+    {
+        totalCoin = PlayerPrefs.GetInt("TOTAL_COIN", 0);
+        totalGold = PlayerPrefs.GetInt("TOTAL_GOLD", 0);
     }
 
     public void AddCoint(int num)
@@ -82,5 +96,16 @@ public class PlayerDataManager : MonoBehaviour
         OnHealthChanged?.Invoke(health);
         OnDistanceChanged?.Invoke(distance);
     }
+
+    public void SaveAfterRun()
+    {
+        totalCoin += coin;
+        totalGold += gold;
+
+        PlayerPrefs.SetInt("TOTAL_COIN", totalCoin);
+        PlayerPrefs.SetInt("TOTAL_GOLD", totalGold);
+        PlayerPrefs.Save();
+    }
+
 
 }
