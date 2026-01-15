@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
@@ -19,6 +20,12 @@ public class AudioManager : MonoBehaviour
     [Header("Audio Music")]
     public AudioClip menuMusic;
     public AudioClip deathMusic;
+
+    [Header("Audio Mixer")]
+    public AudioMixer audioMixer;
+
+    private const string MUSIC_VOL = "Music";
+    private const string SFX_VOL = "SFX";
 
 
     private void Awake()
@@ -72,6 +79,31 @@ public class AudioManager : MonoBehaviour
     public void PlaySoundCountDown()
     {
         sfxSource.PlayOneShot(countdown);
+    }
+
+    public void SetMusicVolume(float value)
+    {
+        value = Mathf.Clamp(value, 0.0001f, 1f);
+
+        audioMixer.SetFloat(MUSIC_VOL, Mathf.Log10(value) * 20);
+        PlayerPrefs.SetFloat(MUSIC_VOL, value);
+    }
+
+    public void SetSFXVolume(float value)
+    {
+        value = Mathf.Clamp(value, 0.0001f, 1f);
+
+        audioMixer.SetFloat(SFX_VOL, Mathf.Log10(value) * 20);
+        PlayerPrefs.SetFloat(SFX_VOL, value);
+    }
+
+    public void LoadVolume()
+    {
+        float music = PlayerPrefs.GetFloat(MUSIC_VOL, 1f);
+        float sfx = PlayerPrefs.GetFloat(SFX_VOL, 1f);
+
+        SetMusicVolume(music);
+        SetSFXVolume(sfx);
     }
 
 }
