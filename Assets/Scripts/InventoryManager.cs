@@ -68,4 +68,9 @@ public class InventoryManager : MonoBehaviour
             inventory[key] = PlayerPrefs.GetInt("INV_" + key, 0);
         }
     }
+    public bool HasItem(ItemCategory cat, string id)
+    {
+        return GetCount(cat, id) > 0;
+    }
+
 }

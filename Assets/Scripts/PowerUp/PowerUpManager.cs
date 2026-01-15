@@ -1,9 +1,12 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PowerUpManager : MonoBehaviour
 {
     public static PowerUpManager Instance;
+    public List<ShopItemData> allItems;
+
 
     public List<PowerUpData> powerUps;
     public PowerUpProgressUI progressUI;
@@ -15,6 +18,31 @@ public class PowerUpManager : MonoBehaviour
     void Awake()
     {
         Instance = this;
+    }
+
+    private void Reset()
+    {
+        allItems = new List<ShopItemData>(Resources.LoadAll<ShopItemData>("Items"));
+
+    }
+
+    private void Start()
+    {
+        GameStartCountDown.Instance.OnStartGame += ActivateEquippedPowerUp;
+    }
+
+    void ActivateEquippedPowerUp()
+    {
+        string powerUpId = PlayerPrefs.GetString("EQUIPPED_POWERUP", "");
+
+        if (string.IsNullOrEmpty(powerUpId)) return;
+        ShopItemData shopItemData = allItems.Find(x => x.id == powerUpId && x.Category == ItemCategory.PowerUp);
+        PUData item = shopItemData as PUData;
+        if (InventoryManager.Instance.Use(ItemCategory.PowerUp, powerUpId))
+        {
+            Activate(item.type);
+        }
+
     }
 
     void Update()

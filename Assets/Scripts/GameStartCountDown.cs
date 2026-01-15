@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using TMPro;
 using System.Collections;
+using System;
 
 public class GameStartCountDown : MonoBehaviour
 {
@@ -8,6 +9,22 @@ public class GameStartCountDown : MonoBehaviour
     public GameObject countdownPanel;
     private Animator anim;
     public GameObject player;
+
+    public static GameStartCountDown Instance;
+    public event Action OnStartGame;
+
+
+
+    void Awake()
+    {
+
+        if (Instance == null)
+        {
+            Instance = this;
+            //DontDestroyOnLoad(gameObject);
+        }
+        else Destroy(gameObject);
+    }
 
     private void Start()
     {
@@ -40,5 +57,6 @@ public class GameStartCountDown : MonoBehaviour
         anim.SetBool("Ready", false);
         player.GetComponent<PlayerMovement>().forwardSpeed = 7f;
         player.GetComponent<PlayerMovement>().canMove = true;
+        OnStartGame?.Invoke();
     }
 }
