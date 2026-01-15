@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class GamePlayManager : MonoBehaviour
 {
+    public AudioClip gameStartMusic;
     public static GamePlayManager Instance { get; private set; }
     private GameObject player;
-    public List<CharacterData> characters;
 
     private void Awake()
     {
@@ -20,8 +20,12 @@ public class GamePlayManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        characters = Resources.LoadAll<CharacterData>("Items").ToList();
 
+    }
+
+    private void Start()
+    {
+        AudioManager.Instance.PlayMusic(gameStartMusic);
     }
 
     public GameObject GetPlayer()

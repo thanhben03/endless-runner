@@ -18,6 +18,7 @@ public class InventoryManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
             Load();
+            Add(ItemCategory.Character, "1");
         }
         else Destroy(gameObject);
     }
@@ -50,7 +51,6 @@ public class InventoryManager : MonoBehaviour
     {
         foreach (var kv in inventory)
         {
-            Debug.Log("INV_" + kv.Key);
             PlayerPrefs.SetInt("INV_" + kv.Key, kv.Value);
         }
 

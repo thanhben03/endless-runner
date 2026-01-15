@@ -4,13 +4,22 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
+
+    [Header("Audio Source")]
+    public AudioSource musicSource;
+    public AudioSource sfxSource;
+
     public static AudioManager Instance { get; private set; }
+    [Header("Audio SFX")]
     public AudioClip slapHurt;
     public AudioClip cointCollect;
     public AudioClip heartAlert;
     public AudioClip countdown;
 
-    public AudioSource audioSource;
+    [Header("Audio Music")]
+    public AudioClip menuMusic;
+    public AudioClip deathMusic;
+
 
     private void Awake()
     {
@@ -25,24 +34,44 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    public void PlayMusic(AudioClip clip)
+    {
+        if (musicSource.clip == clip) return;
+
+        musicSource.Stop();
+        musicSource.clip = clip;
+        musicSource.loop = true;
+        musicSource.Play();
+    }
+
+    public void PlayMusicDeath()
+    {
+        if (musicSource.clip == deathMusic) return;
+
+        musicSource.Stop();
+        musicSource.clip = deathMusic;
+        musicSource.loop = true;
+        musicSource.Play();
+    }
+
     public void PlaySoundCointCollect()
     {
-        audioSource.PlayOneShot(cointCollect);
+        sfxSource.PlayOneShot(cointCollect);
     }
 
     public void PlaySoundSlapHurt()
     {
-        audioSource.PlayOneShot(slapHurt);
+        sfxSource.PlayOneShot(slapHurt);
     }
 
     public void PlaySoundHeartCollect ()
     {
-        audioSource.PlayOneShot(heartAlert);
+        sfxSource.PlayOneShot(heartAlert);
     }
 
     public void PlaySoundCountDown()
     {
-        audioSource.PlayOneShot(countdown);
+        sfxSource.PlayOneShot(countdown);
     }
 
 }

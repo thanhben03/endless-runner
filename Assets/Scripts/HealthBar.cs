@@ -12,6 +12,12 @@ public class HealthBar : MonoBehaviour
         PlayerDataManager.Instance.OnHealthChanged += UpdateHealthBar;
     }
 
+    private void OnDestroy()
+    {
+        PlayerDataManager.Instance.OnHitDamaged -= UpdateHealthBar;
+        PlayerDataManager.Instance.OnHealthChanged -= UpdateHealthBar;
+    }
+
     // Update is called once per frame
     void Update()
     {

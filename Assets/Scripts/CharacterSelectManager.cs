@@ -1,59 +1,47 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CharacterSelectManager : MonoBehaviour
 {
-    public CharacterData[] characters;
+    public List<CharacterData> characters;
+    public List<CharacterData> selectableCharacters;
 
     private int currentIndex = 0;
     private GameObject currentSelectObj;
 
     void Start()
     {
-        MoveToFirstOwned();
         UpdateUI();
+        selectableCharacters = characters.FindAll(item => InventoryManager.Instance.HasItem(ItemCategory.Character, item.id));
     }
 
-    void MoveToFirstOwned()
-    {
-        for (int i = 0; i < characters.Length; i++)
-        {
-            if (InventoryManager.Instance.HasItem(ItemCategory.Character, characters[i].id))
-            {
-                currentIndex = i;
-                return;
-            }
-        }
-    }
 
     public void Next()
     {
-        do
-        {
-            currentIndex = (currentIndex + 1) % characters.Length;
-        }
-        while (!InventoryManager.Instance.HasItem(ItemCategory.Character, characters[currentIndex].id));
-
+        if (selectableCharacters.Count == 0) return;
+        Debug.Log("Selectable character count: " + selectableCharacters.Count);
+        currentIndex = (currentIndex + 1) % selectableCharacters.Count;
         UpdateUI();
     }
 
     public void Prev()
     {
-        do
-        {
-            currentIndex--;
-            if (currentIndex < 0)
-                currentIndex = characters.Length - 1;
-        }
-        while (!InventoryManager.Instance.HasItem(ItemCategory.Character, characters[currentIndex].id));
+        if (selectableCharacters.Count == 0) return;
 
+        currentIndex--;
+        if (currentIndex < 0)
+            currentIndex = selectableCharacters.Count - 1;
         UpdateUI();
     }
 
     void UpdateUI()
     {
-        bool owned =
-            InventoryManager.Instance.HasItem(ItemCategory.Character, characters[currentIndex].id);
+        Debug.Log("CURRENT INDEX: " + currentIndex);
+
+        bool owned = selectableCharacters.Count > 0 
+            ? InventoryManager.Instance.HasItem(ItemCategory.Character, characters[currentIndex].id)
+            : true;
         if (currentSelectObj != null)
         {
             Destroy(currentSelectObj);
@@ -64,12 +52,11 @@ public class CharacterSelectManager : MonoBehaviour
             currentSelectObj = Instantiate(characters[currentIndex].prefabMenu);
             currentSelectObj.transform.SetParent(gameObject.transform, false);
             PlayerPrefs.SetInt("CHARACTER_ID", int.Parse(characters[currentIndex].id));
-
+            Debug.Log("DA SO HUU");
+        } else
+        {
+            Debug.Log("Chua so huu");
         }
 
-        // Update icon, name
-
-        // Enable / disable Play button
-        // playBtn.interactable = owned;
     }
 }

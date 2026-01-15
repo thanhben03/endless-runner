@@ -52,12 +52,7 @@ public class SegmentGenerator : MonoBehaviour
     public void InitPlayer()
     {
         int characterId = PlayerPrefs.GetInt("CHARACTER_ID", 1);
-        Debug.Log("Character ID: " + characterId);
         GameObject prefab = characters.Find(x => x.id == characterId.ToString()).prefab;
-        if (prefab != null)
-        {
-            Debug.Log("tim thay prefab");
-        }
         Instantiate(prefab);
     }
 }

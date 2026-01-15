@@ -20,6 +20,7 @@ public class GameMenuControl : MonoBehaviour
 
     public void StartGame()
     {
+        Time.timeScale = 1f;
         SceneManager.LoadScene("Run");
         //GamePlayManager.Instance.InitPlayer();
         //PlayerDataManager.Instance.ResetPlayerData();
@@ -39,6 +40,7 @@ public class GameMenuControl : MonoBehaviour
 
     public void LoadMainMenu ()
     {
+        Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");
         //UIManager.Instance.gameObject.SetActive(false);
     }

@@ -43,7 +43,6 @@ public class PowerUpSelector : MonoBehaviour
         ShopItemData item = selectablePowerUps[index];
         if (item is PUData powerUp)
         {
-            Debug.Log(powerUp.type);
             imgIcon.sprite = item.icon;
             qty.text = InventoryManager.Instance.GetCount(item.Category, item.id).ToString();
             PlayerPrefs.SetString("EQUIPPED_POWERUP", powerUp.id);

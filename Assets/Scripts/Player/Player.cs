@@ -39,15 +39,12 @@ public class Player : MonoBehaviour
 
     private void HitDamage(int health)
     {
-        Debug.Log("HEALTH: " + health);
         
-        // Kiểm tra và cập nhật lại Camera reference nếu cần
         if (mainCam == null)
         {
             UpdateCameraReference();
         }
         
-        // Kiểm tra lại sau khi cập nhật
         if (mainCam != null)
         {
             mainCam.GetComponent<Animator>().SetTrigger("HitWall");
@@ -59,6 +56,7 @@ public class Player : MonoBehaviour
             PlayerDataManager.Instance.SaveAfterRun();
             gameObject.GetComponent<PlayerMovement>().enabled = false;
             gameObject.GetComponent<PlayerMovement>().forwardSpeed = 0f;
+            AudioManager.Instance.PlayMusicDeath();
             anim.SetInteger("Died", 3);
         } else
         {

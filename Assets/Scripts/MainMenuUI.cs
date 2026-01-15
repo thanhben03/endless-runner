@@ -11,6 +11,8 @@ public class MainMenuUI : MonoBehaviour
     {
         playBtn.onClick.AddListener(StartGame);
         shopBtn.onClick.AddListener(LoadShop);
+        AudioManager.Instance.PlayMusic(AudioManager.Instance.menuMusic);
+
     }
 
     // Update is called once per frame

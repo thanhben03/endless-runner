@@ -48,7 +48,6 @@ public class PlayerDataManager : MonoBehaviour
 
     void LoadMetaData()
     {
-        Debug.Log("LOAD META DATA: " + PlayerPrefs.GetInt("TOTAL_COIN"));
 
         totalCoin = PlayerPrefs.GetInt("TOTAL_COIN", 0);
         totalGold = PlayerPrefs.GetInt("TOTAL_GOLD", 0);
@@ -63,6 +62,7 @@ public class PlayerDataManager : MonoBehaviour
     public void HitDamage(int damage)
     {
         health -= damage;
+        Debug.Log("Get damage: " + damage);
         OnHitDamaged?.Invoke(health);
     }
 

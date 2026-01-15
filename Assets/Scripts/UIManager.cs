@@ -150,4 +150,9 @@ public class UIManager : MonoBehaviour
     {
         GameMenuControl.Instance.LoadMainMenu();
     }
+
+    public void OnResumeGame()
+    {
+        GameMenuControl.Instance.ResumeGame();
+    }
 }

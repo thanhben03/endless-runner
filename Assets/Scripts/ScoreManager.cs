@@ -45,7 +45,6 @@ public class ScoreManager : MonoBehaviour
         if (isDoubleScore)
         {
             value *= 2;
-            Debug.Log("Double Score");
         }
         itemScore += value * itemMultiplier;
         CalculateTotalScore();
