@@ -33,6 +33,7 @@ public class PlayerMovement : MonoBehaviour
         controller = GetComponent<CharacterController>();
         originalHeight = controller.height;
         originalCenter = controller.center;
+        anim = GetComponentInChildren<Animator>();
     }
 
     void Update()

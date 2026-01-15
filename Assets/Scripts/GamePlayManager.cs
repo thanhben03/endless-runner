@@ -1,11 +1,13 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GamePlayManager : MonoBehaviour
 {
     public static GamePlayManager Instance { get; private set; }
-    public GameObject player;
+    private GameObject player;
+    public List<CharacterData> characters;
 
     private void Awake()
     {
@@ -18,12 +20,15 @@ public class GamePlayManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        characters = Resources.LoadAll<CharacterData>("Items").ToList();
+
     }
 
     public GameObject GetPlayer()
     {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        return player;
+        return GameObject.FindGameObjectWithTag("Player");
     }
+
+
 
 }

@@ -24,11 +24,18 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        PlayerDataManager.Instance.OnCoinChanged += UpdateUICoint;
-        PlayerDataManager.Instance.OnGoldChanged += UpdateUIGold;
-        PlayerDataManager.Instance.OnDistanceChanged += UpdateUIDistance;
-        PlayerDataManager.Instance.OnHitDamaged += UpdateUIResultDeath;
-        ScoreManager.Instance.OnScoreChanged += UpdateUIScore;
+        if (PlayerDataManager.Instance != null)
+        {
+            PlayerDataManager.Instance.OnCoinChanged += UpdateUICoint;
+            PlayerDataManager.Instance.OnGoldChanged += UpdateUIGold;
+            PlayerDataManager.Instance.OnDistanceChanged += UpdateUIDistance;
+            PlayerDataManager.Instance.OnHitDamaged += UpdateUIResultDeath;
+        }
+        
+        if (ScoreManager.Instance != null)
+        {
+            ScoreManager.Instance.OnScoreChanged += UpdateUIScore;
+        }
     }
 
     private void Awake()
@@ -44,24 +51,53 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        // Unsubscribe các events để tránh memory leak và lỗi khi object bị destroy
+        if (PlayerDataManager.Instance != null)
+        {
+            PlayerDataManager.Instance.OnCoinChanged -= UpdateUICoint;
+            PlayerDataManager.Instance.OnGoldChanged -= UpdateUIGold;
+            PlayerDataManager.Instance.OnDistanceChanged -= UpdateUIDistance;
+            PlayerDataManager.Instance.OnHitDamaged -= UpdateUIResultDeath;
+        }
+        
+        if (ScoreManager.Instance != null)
+        {
+            ScoreManager.Instance.OnScoreChanged -= UpdateUIScore;
+        }
+    }
+
     public void UpdateUICoint(int num)
     {
-        cointText.text = num + "";
+        if (cointText != null)
+        {
+            cointText.text = num + "";
+        }
     }
 
     public void UpdateUIGold(int num)
     {
-        goldText.text = num + "";
+        if (goldText != null)
+        {
+            goldText.text = num + "";
+        }
     }
 
     public void UpdateUIDistance(int distance)
     {
-        distanceText.text = distance + "m";
+        if (distanceText != null)
+        {
+            distanceText.text = distance + "m";
+        }
     }
 
     public void UpdateUIScore(int score)
     {
-        scoreText.text = "Score: " + score;
+        if (scoreText != null)
+        {
+            scoreText.text = "Score: " + score;
+        }
     }
 
     public void UpdateUIResultDeath(int health)
@@ -70,11 +106,34 @@ public class UIManager : MonoBehaviour
         {
             return;
         }
+        
+        // Kiểm tra null cho tất cả các UI elements trước khi sử dụng
+        if (deathMenu == null)
+        {
+            return;
+        }
+        
         deathMenu.SetActive(true);
-        cointResultText.text = PlayerDataManager.Instance.Coin.ToString();
-        goldResultText.text = PlayerDataManager.Instance.Gold.ToString();
-        scoreResultText.text = "Score: " + ScoreManager.Instance.TotalScore;
-        distanceResultText.text = "Distance: " + PlayerDataManager.Instance.Distance;
+        
+        if (cointResultText != null && PlayerDataManager.Instance != null)
+        {
+            cointResultText.text = PlayerDataManager.Instance.Coin.ToString();
+        }
+        
+        if (goldResultText != null && PlayerDataManager.Instance != null)
+        {
+            goldResultText.text = PlayerDataManager.Instance.Gold.ToString();
+        }
+        
+        if (scoreResultText != null && ScoreManager.Instance != null)
+        {
+            scoreResultText.text = "Score: " + ScoreManager.Instance.TotalScore;
+        }
+        
+        if (distanceResultText != null && PlayerDataManager.Instance != null)
+        {
+            distanceResultText.text = "Distance: " + PlayerDataManager.Instance.Distance;
+        }
     }
 
     public void UpdateUIPowerUpProgressBar()
@@ -87,4 +146,8 @@ public class UIManager : MonoBehaviour
         GameMenuControl.Instance.PauseGame();
     }
 
+    public void LoadMainMenu()
+    {
+        GameMenuControl.Instance.LoadMainMenu();
+    }
 }

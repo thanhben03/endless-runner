@@ -20,8 +20,9 @@ public class GameMenuControl : MonoBehaviour
 
     public void StartGame()
     {
-        Debug.Log("Start game");
         SceneManager.LoadScene("Run");
+        //GamePlayManager.Instance.InitPlayer();
+        //PlayerDataManager.Instance.ResetPlayerData();
     }
 
     public void PauseGame()

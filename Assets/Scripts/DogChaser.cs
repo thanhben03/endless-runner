@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class DogChaser : MonoBehaviour
 {
@@ -22,12 +22,19 @@ public class DogChaser : MonoBehaviour
 
     void Start()
     {
+        player = GamePlayManager.Instance.GetPlayer().transform;
         anim = GetComponent<Animator>();
         currentDistance = maxDistance;
         targetDistance = maxDistance;
         lastPlayerPos = player.position;
         PlayerDataManager.Instance.OnHitDamaged += PlayerHitDamage;
         anim.SetBool("Ready", true);
+
+    }
+
+    private void OnDestroy()
+    {
+        PlayerDataManager.Instance.OnHitDamaged -= PlayerHitDamage;
 
     }
 
@@ -47,23 +54,24 @@ public class DogChaser : MonoBehaviour
             ? catchUpSpeed
             : followSpeed;
 
-        transform.position = Vector3.Lerp(
+        if (isStart)
+        {
+            transform.position = Vector3.Lerp(
             transform.position,
             targetPos,
             Time.deltaTime * speed
         );
+        }
 
         // Nhìn theo player
         transform.LookAt(player);
     }
 
-    // 👉 Gọi khi player mắc lỗi
     public void DogAlmostCatch()
     {
         targetDistance = minDistance;
     }
 
-    // 👉 Gọi khi player chơi tốt lại
     public void DogFallBack()
     {
         targetDistance = maxDistance;
@@ -71,7 +79,7 @@ public class DogChaser : MonoBehaviour
 
     private void PlayerHitDamage(int health)
     {
-        Debug.Log("Player Hit Damage on Dog chase: " + health);
+
         if (health <= 0)
         {
             anim.SetBool("Ready", true);

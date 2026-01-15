@@ -25,8 +25,10 @@ public class PowerUpSelector : MonoBehaviour
         if (selectablePowerUps.Count > 0)
             ShowItem(0);
         else
+        {
             imgIcon.sprite = noItem;
-
+            qty.text = "";
+        }
     }
     public void Next()
     {

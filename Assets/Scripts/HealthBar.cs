@@ -22,7 +22,11 @@ public class HealthBar : MonoBehaviour
     {
         for (int i = 0; i < hearts.Count; i++)
         {
-            hearts[i].gameObject.SetActive(i < health);
+            if (hearts[i] != null)
+            {
+                hearts[i].gameObject.SetActive(i < health);
+
+            }
         }
     }
 }

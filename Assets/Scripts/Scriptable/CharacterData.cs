@@ -6,7 +6,8 @@ using UnityEngine;
 public class CharacterData : ShopItemData
 {
     public CharacterType type;
-
+    public GameObject prefab;
+    public GameObject prefabMenu;
 
     public override ItemCategory Category => ItemCategory.Character;
 }

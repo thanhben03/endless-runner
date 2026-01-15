@@ -20,6 +20,7 @@ public class PowerUpManager : MonoBehaviour
         Instance = this;
     }
 
+
     private void Reset()
     {
         allItems = new List<ShopItemData>(Resources.LoadAll<ShopItemData>("Items"));
@@ -29,6 +30,9 @@ public class PowerUpManager : MonoBehaviour
     private void Start()
     {
         GameStartCountDown.Instance.OnStartGame += ActivateEquippedPowerUp;
+        magnet = GamePlayManager.Instance.GetPlayer().GetComponentInChildren<Magnet>();
+        invincible = GamePlayManager.Instance.GetPlayer().GetComponentInChildren<Invincible>();
+        multipleScore = GamePlayManager.Instance.GetPlayer().GetComponentInChildren<MultipleScore>();
     }
 
     void ActivateEquippedPowerUp()

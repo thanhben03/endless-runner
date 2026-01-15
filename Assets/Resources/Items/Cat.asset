@@ -18,3 +18,6 @@ MonoBehaviour:
   price: 2
   currency: 0
   type: 0
+  prefab: {fileID: 2608747862384553258, guid: af59716c53ff3f6459e2980cae68e49b, type: 3}
+  prefabMenu: {fileID: 921194237082489270, guid: ecb68552eeb7916479a93460a76b7e32,
+    type: 3}
