@@ -24,6 +24,7 @@ public class PlayerAPI : MonoBehaviour
         Action<string> onError
     )
     {
+        Debug.Log("Nickname: " + nickname);
         CreatePlayerRequest data = new CreatePlayerRequest
         {
             nickname = nickname,
@@ -34,7 +35,7 @@ public class PlayerAPI : MonoBehaviour
         };
 
         yield return ApiClient.Post<CreatePlayerRequest, PlayerResponse>(
-            "/player",
+            "player",
             data,
             res =>
             {
@@ -46,6 +47,48 @@ public class PlayerAPI : MonoBehaviour
             onError
         );
     }
+
+    public IEnumerator SyncPlayerFromServer(
+        int playerId,
+        Action<PlayerModel> onSuccess,
+        Action<string> onError
+    )
+    {
+        yield return ApiClient.Get<PlayerResponse>(
+            $"player/{playerId}",
+            res =>
+            {
+                PlayerModel player = new PlayerModel
+                {
+                    id = res.id,
+                    nickname = res.nickname,
+                    coin = res.coin,
+                    gold = res.gold,
+                    distance = res.distance
+                };
+
+                onSuccess?.Invoke(player);
+            },
+            onError
+        );
+    }
+
+
+    public IEnumerator UpdatePlayer(
+        int playerId,
+        UpdatePlayerRequest data,
+        Action onSuccess,
+        Action<string> onError
+    )
+    {
+        yield return ApiClient.Put(
+            $"player/{playerId}",
+            data,
+            onSuccess,
+            onError
+        );
+    }
+
 
 
 }

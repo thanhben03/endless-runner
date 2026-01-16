@@ -7,6 +7,7 @@ public class PlayerDataManager : MonoBehaviour
 {
     public static PlayerDataManager Instance { get; private set; }
 
+    // DATA LOCAL RUN
     [SerializeField] private int coin;
     [SerializeField] private int gold;
     [SerializeField] private int health;
@@ -17,11 +18,18 @@ public class PlayerDataManager : MonoBehaviour
     public int Health => health;
     public int Distance => distance;
 
-    [SerializeField] private int totalCoin;
-    [SerializeField] private int totalGold;
+    // DATA SYNC
+    private PlayerModel player;
 
-    public int TotalCoin => totalCoin;
-    public int TotalGold => totalGold;
+    public PlayerModel Player => player;
+
+    //[SerializeField] private int totalCoin;
+    //[SerializeField] private int totalGold;
+    //[SerializeField] private int totalDistance;
+    //public int TotalCoin => totalCoin;
+    //public int TotalGold => totalGold;
+    //public int TotalHealth => health;
+    //public int TotalDistance => totalDistance;
 
 
     public event Action<int> OnCoinChanged;
@@ -36,7 +44,8 @@ public class PlayerDataManager : MonoBehaviour
         ResetPlayerData();
         if (Instance == null)
         {
-            LoadMetaData();
+            //LoadMetaData();
+
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }
@@ -46,12 +55,21 @@ public class PlayerDataManager : MonoBehaviour
         }
     }
 
-    void LoadMetaData()
+    private void Start()
     {
+        if (PlayerPrefs.GetInt("PlayerId") > 0)
+        {
 
-        totalCoin = PlayerPrefs.GetInt("TOTAL_COIN", 0);
-        totalGold = PlayerPrefs.GetInt("TOTAL_GOLD", 0);
+            SyncPlayerFromServer();
+        }
     }
+
+    //void LoadMetaData()
+    //{
+
+    //    totalCoin = PlayerPrefs.GetInt("TOTAL_COIN", 0);
+    //    totalGold = PlayerPrefs.GetInt("TOTAL_GOLD", 0);
+    //}
 
     public void AddCoint(int num)
     {
@@ -101,12 +119,35 @@ public class PlayerDataManager : MonoBehaviour
 
     public void SaveAfterRun()
     {
-        totalCoin += coin;
-        totalGold += gold;
+        player.coin += coin;
+        player.gold += gold;
+        player.distance += distance;
+        player.score += ScoreManager.Instance.TotalScore;
+        UpdatePlayerRequest req = new UpdatePlayerRequest
+        {
+            coin = player.coin,
+            gold = player.gold,
+            distance = player.distance,
+            score = player.score
+        };
 
-        PlayerPrefs.SetInt("TOTAL_COIN", totalCoin);
-        PlayerPrefs.SetInt("TOTAL_GOLD", totalGold);
-        PlayerPrefs.Save();
+        StartCoroutine(PlayerAPI.Instance.UpdatePlayer(
+            player.id, 
+            req,
+            onSuccess: () =>
+            {
+                Debug.Log("UPDATE PLAYER: " + req.coin + " / " + req.gold + " / " + req.score);
+            },
+            onError: message =>
+            {
+                Debug.LogError("ERROR WHEN UPDATE PLAYER: " + message);
+            }
+            )
+        );
+
+        //PlayerPrefs.SetInt("TOTAL_COIN", player.coin);
+        //PlayerPrefs.SetInt("TOTAL_GOLD", player.gold);
+        //PlayerPrefs.Save();
     }
 
     public void SaveCurrency(CurrencyType type, int amount)
@@ -117,13 +158,13 @@ public class PlayerDataManager : MonoBehaviour
         {
            
             case CurrencyType.Coin:
-                totalCoin += amount;
-                PlayerPrefs.SetInt("TOTAL_COIN", totalCoin);
+                player.coin += amount;
+                PlayerPrefs.SetInt("TOTAL_COIN", player.coin);
                 break;
 
             case CurrencyType.Gold:
-                totalGold += amount;
-                PlayerPrefs.SetInt("TOTAL_GOLD", totalGold);
+                player.gold += amount;
+                PlayerPrefs.SetInt("TOTAL_GOLD", gold);
                 break;
         }
     }
@@ -133,15 +174,15 @@ public class PlayerDataManager : MonoBehaviour
         switch (type)
         {
             case CurrencyType.Coin:
-                if (totalCoin < amount) return false;
-                totalCoin -= amount;
-                PlayerPrefs.SetInt("TOTAL_COIN", totalCoin);
+                if (player.coin < amount) return false;
+                player.coin -= amount;
+                PlayerPrefs.SetInt("TOTAL_COIN", player.coin);
                 break;
 
             case CurrencyType.Gold:
-                if (totalGold < amount) return false;
-                totalGold -= amount;
-                PlayerPrefs.SetInt("TOTAL_GOLD", totalGold);
+                if (player.gold < amount) return false;
+                player.gold -= amount;
+                PlayerPrefs.SetInt("TOTAL_GOLD", player.gold);
                 break;
         }
 
@@ -154,5 +195,22 @@ public class PlayerDataManager : MonoBehaviour
         PlayerPrefs.SetInt("PlayerId", id);
         PlayerPrefs.SetString("Nickname", nickname);
         PlayerPrefs.Save();
+    }
+
+    public void SyncPlayerFromServer()
+    {
+        int playerId = PlayerPrefs.GetInt("PlayerId");
+        Debug.Log("PLAYER ID: " + playerId);
+        StartCoroutine(PlayerAPI.Instance.SyncPlayerFromServer(
+            playerId,
+            onSuccess: playerRes =>
+            {
+                player = playerRes;
+            },
+            onError: message =>
+            {
+                Debug.LogError("error when load player: " + message);
+            }
+        ));
     }
 }

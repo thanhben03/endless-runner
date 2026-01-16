@@ -33,7 +33,9 @@ public class ShopManager : MonoBehaviour
 
     public void UpdateCurrency()
     {
-        totalCoint.text = PlayerPrefs.GetInt("TOTAL_COIN", 0) + "";
-        totalGold.text = PlayerPrefs.GetInt("TOTAL_GOLD", 0) + "";
+        //totalCoint.text = PlayerPrefs.GetInt("TOTAL_COIN", 0) + "";
+        //totalGold.text = PlayerPrefs.GetInt("TOTAL_GOLD", 0) + "";
+        totalCoint.text = PlayerDataManager.Instance.Player.coin + "";
+        totalGold.text = PlayerDataManager.Instance.Player.gold + "";
     }
 }
