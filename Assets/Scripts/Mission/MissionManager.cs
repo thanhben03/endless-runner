@@ -70,6 +70,7 @@ public class MissionManager : MonoBehaviour
     {
         foreach (var mission in activeMissions)
         {
+            mission.isCollected = PlayerPrefs.GetInt("COMPLETED_MISSION_" + mission.id) == 1 ? true : false;
             mission.currentValue =
                 PlayerPrefs.GetInt("MISSION_" + mission.id, 0);
         }

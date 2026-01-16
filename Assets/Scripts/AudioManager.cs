@@ -41,6 +41,19 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        // Load volume sau khi AudioMixer đã được khởi tạo hoàn toàn
+        StartCoroutine(LoadVolumeDelayed());
+    }
+
+    private IEnumerator LoadVolumeDelayed()
+    {
+        // Đợi 1 frame để đảm bảo AudioMixer đã sẵn sàng
+        yield return null;
+        LoadVolume();
+    }
+
     public void PlayMusic(AudioClip clip)
     {
         if (musicSource.clip == clip) return;
@@ -99,6 +112,7 @@ public class AudioManager : MonoBehaviour
 
     public void LoadVolume()
     {
+        Debug.Log("Load volumeeee");
         float music = PlayerPrefs.GetFloat(MUSIC_VOL, 1f);
         float sfx = PlayerPrefs.GetFloat(SFX_VOL, 1f);
 

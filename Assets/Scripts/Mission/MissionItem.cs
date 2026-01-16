@@ -26,6 +26,6 @@ public class MissionItem : MonoBehaviour
         mission.isCollected = true;
         collectBtn.interactable = false;
         PlayerDataManager.Instance.SaveCurrency(CurrencyType.Coin, mission.coinAward);
-
+        PlayerPrefs.SetInt("COMPLETED_MISSION_" + mission.id, 1);
     }
 }

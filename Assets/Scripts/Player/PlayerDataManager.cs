@@ -149,5 +149,10 @@ public class PlayerDataManager : MonoBehaviour
         return true;
     }
 
-
+    public void SaveNewPlayer(int id, string nickname)
+    {
+        PlayerPrefs.SetInt("PlayerId", id);
+        PlayerPrefs.SetString("Nickname", nickname);
+        PlayerPrefs.Save();
+    }
 }

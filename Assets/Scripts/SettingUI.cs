@@ -6,13 +6,18 @@ public class SettingUI : MonoBehaviour
     public Slider musicSlider;
     public Slider sfxSlider;
 
-    private void Start()
+    private void OnEnable()
     {
-
+        // Sync slider với giá trị hiện tại khi mở popup
         musicSlider.value = PlayerPrefs.GetFloat("Music", 1f);
         sfxSlider.value = PlayerPrefs.GetFloat("SFX", 1f);
+        
+        // Không cần gọi LoadVolume() vì AudioManager đã load trong Start()
+    }
 
-        AudioManager.Instance.LoadVolume();
+    public void OnCloseSettingPopup()
+    {
+        gameObject.SetActive(false);
     }
 
     public void OnMusicVolumeChanged(float value)
