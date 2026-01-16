@@ -13,14 +13,13 @@ public class CharacterSelectManager : MonoBehaviour
     void Start()
     {
         UpdateUI();
-        selectableCharacters = characters.FindAll(item => InventoryManager.Instance.HasItem(ItemCategory.Character, item.id));
+        selectableCharacters = characters.FindAll(item => InventoryManager.Instance.HasItem(item.id));
     }
 
 
     public void Next()
     {
         if (selectableCharacters.Count == 0) return;
-        Debug.Log("Selectable character count: " + selectableCharacters.Count);
         currentIndex = (currentIndex + 1) % selectableCharacters.Count;
         UpdateUI();
     }
@@ -37,10 +36,9 @@ public class CharacterSelectManager : MonoBehaviour
 
     void UpdateUI()
     {
-        Debug.Log("CURRENT INDEX: " + currentIndex);
 
         bool owned = selectableCharacters.Count > 0 
-            ? InventoryManager.Instance.HasItem(ItemCategory.Character, characters[currentIndex].id)
+            ? InventoryManager.Instance.HasItem(characters[currentIndex].id)
             : true;
         if (currentSelectObj != null)
         {
@@ -51,8 +49,7 @@ public class CharacterSelectManager : MonoBehaviour
         {
             currentSelectObj = Instantiate(characters[currentIndex].prefabMenu);
             currentSelectObj.transform.SetParent(gameObject.transform, false);
-            PlayerPrefs.SetInt("CHARACTER_ID", int.Parse(characters[currentIndex].id));
-            Debug.Log("DA SO HUU");
+            PlayerPrefs.SetInt("CHARACTER_ID", characters[currentIndex].id);
         } else
         {
             Debug.Log("Chua so huu");

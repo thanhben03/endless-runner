@@ -7,9 +7,6 @@ using UnityEngine.Networking;
 public static class ApiClient
 {
     private const string BASE_API_URL = "http://localhost:8080/api/";
-
-
-
     public static IEnumerator Post<TRequest, TResponse>(
         string url,
         TRequest data,
@@ -20,31 +17,34 @@ public static class ApiClient
 
         string json = JsonUtility.ToJson(data);
         Debug.Log(json);
-        UnityWebRequest req = new UnityWebRequest(BASE_API_URL + url, "POST");
-        req.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(json));
-        req.downloadHandler = new DownloadHandlerBuffer();
-        req.SetRequestHeader("Content-Type", "application/json");
-
-        yield return req.SendWebRequest();
-
-        if (req.result != UnityWebRequest.Result.Success)
+        using (UnityWebRequest req = new UnityWebRequest(BASE_API_URL + url, "POST"))
         {
-            TryParseError(req.downloadHandler.text, onError);
-        }
-        else
-        {
-            try
+            req.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(json));
+            req.downloadHandler = new DownloadHandlerBuffer();
+            req.SetRequestHeader("Content-Type", "application/json");
+
+            yield return req.SendWebRequest();
+
+            if (req.result != UnityWebRequest.Result.Success)
             {
-                TResponse res =
-                    JsonUtility.FromJson<TResponse>(req.downloadHandler.text);
-                onSuccess?.Invoke(res);
+                TryParseError(req.downloadHandler.text, onError);
             }
-            catch (Exception e)
+            else
             {
-                onError?.Invoke("Parse response failed");
-                Debug.LogError(e);
+                try
+                {
+                    TResponse res =
+                        JsonUtility.FromJson<TResponse>(req.downloadHandler.text);
+                    onSuccess?.Invoke(res);
+                }
+                catch (Exception e)
+                {
+                    onError?.Invoke("Parse response failed");
+                    Debug.LogError(e);
+                }
             }
         }
+        
     }
 
     public static IEnumerator Get<TResponse>(
@@ -53,29 +53,32 @@ public static class ApiClient
         Action<string> onError
     )
     {
-        UnityWebRequest req = UnityWebRequest.Get(BASE_API_URL + url);
-        req.SetRequestHeader("Content-Type", "application/json");
-
-        yield return req.SendWebRequest();
-
-        if (req.result != UnityWebRequest.Result.Success)
+        using (UnityWebRequest req = UnityWebRequest.Get(BASE_API_URL + url))
         {
-            TryParseError(req.downloadHandler.text, onError);
-        }
-        else
-        {
-            try
+            req.SetRequestHeader("Content-Type", "application/json");
+
+            yield return req.SendWebRequest();
+
+            if (req.result != UnityWebRequest.Result.Success)
             {
-                TResponse res =
-                    JsonUtility.FromJson<TResponse>(req.downloadHandler.text);
-                onSuccess?.Invoke(res);
+                TryParseError(req.downloadHandler.text, onError);
             }
-            catch (Exception e)
+            else
             {
-                onError?.Invoke("Parse response failed");
-                Debug.LogError(e);
+                try
+                {
+                    TResponse res =
+                        JsonUtility.FromJson<TResponse>(req.downloadHandler.text);
+                    onSuccess?.Invoke(res);
+                }
+                catch (Exception e)
+                {
+                    onError?.Invoke("Parse response failed");
+                    Debug.LogError(e);
+                }
             }
         }
+        
     }
 
 
@@ -88,38 +91,41 @@ public static class ApiClient
     {
         string json = JsonUtility.ToJson(data);
 
-        UnityWebRequest req = new UnityWebRequest(
+        using (UnityWebRequest req = new UnityWebRequest(
             BASE_API_URL + url,
             UnityWebRequest.kHttpVerbPUT
-        );
-
-        req.uploadHandler = new UploadHandlerRaw(
+        ))
+        {
+            req.uploadHandler = new UploadHandlerRaw(
             System.Text.Encoding.UTF8.GetBytes(json)
         );
-        req.downloadHandler = new DownloadHandlerBuffer();
+            req.downloadHandler = new DownloadHandlerBuffer();
 
-        req.SetRequestHeader("Content-Type", "application/json");
+            req.SetRequestHeader("Content-Type", "application/json");
 
-        yield return req.SendWebRequest();
+            yield return req.SendWebRequest();
 
-        if (req.result != UnityWebRequest.Result.Success)
-        {
-            TryParseError(req.downloadHandler.text, onError);
-        }
-        else
-        {
-            try
+            if (req.result != UnityWebRequest.Result.Success)
             {
-                TResponse res =
-                    JsonUtility.FromJson<TResponse>(req.downloadHandler.text);
-                onSuccess?.Invoke(res);
+                TryParseError(req.downloadHandler.text, onError);
             }
-            catch (Exception e)
+            else
             {
-                onError?.Invoke("Parse response failed");
-                Debug.LogError(e);
+                try
+                {
+                    TResponse res =
+                        JsonUtility.FromJson<TResponse>(req.downloadHandler.text);
+                    onSuccess?.Invoke(res);
+                }
+                catch (Exception e)
+                {
+                    onError?.Invoke("Parse response failed");
+                    Debug.LogError(e);
+                }
             }
         }
+
+        
     }
 
     public static IEnumerator Put<TRequest>(
@@ -131,28 +137,31 @@ public static class ApiClient
     {
         string json = JsonUtility.ToJson(data);
 
-        UnityWebRequest req = new UnityWebRequest(
+        using (UnityWebRequest req = new UnityWebRequest(
             BASE_API_URL + url,
             UnityWebRequest.kHttpVerbPUT
-        );
-
-        req.uploadHandler = new UploadHandlerRaw(
+        ))
+        {
+            req.uploadHandler = new UploadHandlerRaw(
             System.Text.Encoding.UTF8.GetBytes(json)
         );
-        req.downloadHandler = new DownloadHandlerBuffer();
+            req.downloadHandler = new DownloadHandlerBuffer();
 
-        req.SetRequestHeader("Content-Type", "application/json");
+            req.SetRequestHeader("Content-Type", "application/json");
 
-        yield return req.SendWebRequest();
+            yield return req.SendWebRequest();
 
-        if (req.result != UnityWebRequest.Result.Success)
-        {
-            TryParseError(req.downloadHandler.text, onError);
+            if (req.result != UnityWebRequest.Result.Success)
+            {
+                TryParseError(req.downloadHandler.text, onError);
+            }
+            else
+            {
+                onSuccess?.Invoke();
+            }
         }
-        else
-        {
-            onSuccess?.Invoke();
-        }
+
+        
     }
 
 

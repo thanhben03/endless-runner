@@ -112,7 +112,6 @@ public class AudioManager : MonoBehaviour
 
     public void LoadVolume()
     {
-        Debug.Log("Load volumeeee");
         float music = PlayerPrefs.GetFloat(MUSIC_VOL, 1f);
         float sfx = PlayerPrefs.GetFloat(SFX_VOL, 1f);
 

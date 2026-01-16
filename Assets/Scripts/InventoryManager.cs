@@ -1,76 +1,115 @@
+using System;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager Instance;
 
-    Dictionary<string, int> inventory = new();
-
+    Dictionary<int, PlayerItemModel> inventory = new();
+    public event Action OnLoadedInventory;
 
     void Awake()
     {
-        //PlayerPrefs.SetInt("TOTAL_COIN", 2000);
-
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            Load();
-            Add(ItemCategory.Character, "1");
         }
         else Destroy(gameObject);
     }
 
-    private string GetKey(ItemCategory cat, string id)
+    private void Start()
     {
-        return $"{cat}_{id}";
-    }
-
-    public int GetCount(ItemCategory cat, string id)
-    {
-        return inventory.TryGetValue(GetKey(cat, id), out var c) ? c : 0;
-    }
-
-    public void Add(ItemCategory cat, string id, int amount = 1)
-    {
-        inventory[GetKey(cat, id)] = GetCount(cat, id) + amount;
-        Save();
-    }
-
-    public bool Use(ItemCategory cat, string id)
-    {
-        if (GetCount(cat, id) <= 0) return false;
-        inventory[GetKey(cat, id)]--;
-        Save();
-        return true;
-    }
-
-    void Save()
-    {
-        foreach (var kv in inventory)
+        if (PlayerPrefs.GetInt("PlayerId") > 0)
         {
-            PlayerPrefs.SetInt("INV_" + kv.Key, kv.Value);
+
+            SetInventoryFromServer();
         }
+    }
+
+    public void SetInventoryFromServer()
+    {
+        int playerId = PlayerPrefs.GetInt("PlayerId");
+        StartCoroutine(InventoryAPI.Instance.GetInventory(
+            playerId,
+            onSuccess: items =>
+            {
+                SetInventory(items);
+                OnLoadedInventory?.Invoke();
+            },
+            onError: message =>
+            {
+                Debug.LogError("ERR WHEN LOAD INVENTORY: " + message);
+            }
+        ));
 
     }
 
-    void Load()
+    public void SyncInventoryToServer()
+    {
+        int playerId = PlayerPrefs.GetInt("PlayerId");
+
+    }
+
+    // ===== QUERY =====
+    public int GetCount(int itemId)
+    {
+
+        return inventory.TryGetValue(itemId, out var item)
+            ? item.quantity
+            : 0;
+    }
+
+    public bool HasItem(int itemId)
+    {
+        return GetCount(itemId) > 0;
+    }
+
+    public void ApplyItem(PlayerItemModel item)
+    {
+        inventory[item.itemId] = item;
+    }
+
+    public void SetInventory(List<PlayerItemModel> items)
     {
         inventory.Clear();
-
-        var allItems = Resources.LoadAll<ShopItemData>("Items");
-
-        foreach (var item in allItems)
+        foreach (var item in items)
         {
-            string key = GetKey(item.Category, item.id);
-            inventory[key] = PlayerPrefs.GetInt("INV_" + key, 0);
+            Debug.Log("GET INVENTORY: " + item.itemId + " / " + item.quantity);
+
+            inventory[item.itemId] = item;
         }
     }
-    public bool HasItem(ItemCategory cat, string id)
+
+    public bool TryUse(int itemId)
     {
-        return GetCount(cat, id) > 0;
+        if (!inventory.TryGetValue(itemId, out var item)) return false;
+        if (item.quantity <= 0) return false;
+        item.quantity--;
+        int playerId = PlayerPrefs.GetInt("PlayerId", -1);
+        if (playerId == -1)
+        {
+            return false;
+        }
+        StartCoroutine(InventoryAPI.Instance.SycnInventory(
+            playerId,
+            itemId,
+            new UpdateInventoryItem
+            {
+                quantity = item.quantity
+            },
+            onSuccess: () =>
+            {
+                Debug.Log("UPDATE INVENTOY ITEM SUCCESS: " + itemId + "/ " + item.quantity);
+            },
+            onError: message =>
+            {
+                Debug.LogError("ERROR WHEN UPDATE INVENTORY ITEM: " + message);
+
+            }
+        ));
+        return true;
     }
 
 }

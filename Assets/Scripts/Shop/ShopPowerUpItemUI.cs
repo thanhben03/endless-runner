@@ -17,7 +17,7 @@ public class ShopPowerUpItemUI : ShopItem
     {
         base.RenderUIItem(data);
 
-        qty.text = InventoryManager.Instance.GetCount(data.Category, data.id) + "";
+        qty.text = InventoryManager.Instance.GetCount(data.id) + "";
     }
 
     public override void Buy()
@@ -28,7 +28,14 @@ public class ShopPowerUpItemUI : ShopItem
             return;
         }
 
-        InventoryManager.Instance.Add(data.Category, data.id);
+        PlayerItemModel playerItemModel = new PlayerItemModel
+        {
+            category = ItemCategory.PowerUp,
+            itemId = data.id,
+            quantity = 1
+        };
+
+        InventoryManager.Instance.ApplyItem(playerItemModel);
         UpdateQtyItem();
         ShopManager.Instance.UpdateCurrency();
     }

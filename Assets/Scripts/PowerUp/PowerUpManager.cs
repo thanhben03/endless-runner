@@ -37,12 +37,12 @@ public class PowerUpManager : MonoBehaviour
 
     void ActivateEquippedPowerUp()
     {
-        string powerUpId = PlayerPrefs.GetString("EQUIPPED_POWERUP", "");
+        int powerUpId = PlayerPrefs.GetInt("EQUIPPED_POWERUP", -1);
 
-        if (string.IsNullOrEmpty(powerUpId)) return;
+        if (powerUpId == -1) return;
         ShopItemData shopItemData = allItems.Find(x => x.id == powerUpId && x.Category == ItemCategory.PowerUp);
         PUData item = shopItemData as PUData;
-        if (InventoryManager.Instance.Use(ItemCategory.PowerUp, powerUpId))
+        if (InventoryManager.Instance.TryUse(powerUpId))
         {
             Activate(item.type);
         }

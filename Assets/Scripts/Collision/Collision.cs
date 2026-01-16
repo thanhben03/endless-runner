@@ -10,7 +10,6 @@ public abstract class Collision : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("COLLISION");
             Invincible invincible = other.GetComponentInChildren<Invincible>();
             if (invincible != null && invincible.IsInvincible)
             {

@@ -17,8 +17,8 @@ public class ShopCharacterItem : ShopItem
     protected override void RenderUIItem(ShopItemData data)
     {
         base.RenderUIItem(data);
-        qty.text = InventoryManager.Instance.GetCount(data.Category, data.id) + "";
-        if (InventoryManager.Instance.GetCount(data.Category, data.id) > 0)
+        qty.text = InventoryManager.Instance.GetCount(data.id) + "";
+        if (InventoryManager.Instance.GetCount(data.id) > 0)
         {
             buyBtn.interactable = false;
         }
@@ -32,8 +32,13 @@ public class ShopCharacterItem : ShopItem
             Debug.Log("Not enough money!");
             return;
         }
-
-        InventoryManager.Instance.Add(data.Category, data.id);
+        PlayerItemModel playerItemModel = new PlayerItemModel
+        {
+            category = ItemCategory.Character,
+            itemId = data.id,
+            quantity = 1
+        };
+        InventoryManager.Instance.ApplyItem(playerItemModel);
         UpdateQtyItem();
         ShopManager.Instance.UpdateCurrency();
         buyBtn.interactable = false;

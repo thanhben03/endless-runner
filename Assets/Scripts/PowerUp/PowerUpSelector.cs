@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class PowerUpSelector : MonoBehaviour
 {
@@ -15,11 +16,33 @@ public class PowerUpSelector : MonoBehaviour
     public TextMeshProUGUI qty;
     public Sprite noItem;
 
+    private void OnEnable()
+    {
+        if (InventoryManager.Instance != null)
+        {
+            Init();
+        }
+    }
+
     void Start()
+    {
+        InventoryManager.Instance.OnLoadedInventory += Init;
+    }
+
+
+
+    private void OnDisable()
+    {
+        InventoryManager.Instance.OnLoadedInventory -= Init;
+
+    }
+
+
+    private void Init()
     {
         selectablePowerUps = allItems.FindAll(item =>
             item.Category == ItemCategory.PowerUp &&
-            InventoryManager.Instance.HasItem(item.Category, item.id)
+            InventoryManager.Instance.HasItem(item.id)
         );
 
         if (selectablePowerUps.Count > 0)
@@ -30,6 +53,12 @@ public class PowerUpSelector : MonoBehaviour
             qty.text = "";
         }
     }
+
+    private object WaitUntil(Func<bool> p)
+    {
+        throw new NotImplementedException();
+    }
+
     public void Next()
     {
         if (selectablePowerUps.Count == 0) return;
@@ -44,8 +73,8 @@ public class PowerUpSelector : MonoBehaviour
         if (item is PUData powerUp)
         {
             imgIcon.sprite = item.icon;
-            qty.text = InventoryManager.Instance.GetCount(item.Category, item.id).ToString();
-            PlayerPrefs.SetString("EQUIPPED_POWERUP", powerUp.id);
+            qty.text = InventoryManager.Instance.GetCount(item.id).ToString();
+            PlayerPrefs.SetInt("EQUIPPED_POWERUP", powerUp.id);
         }
         //Debug.Log("Selected PowerUp: " + item.itemName);
         

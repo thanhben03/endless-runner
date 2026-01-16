@@ -3,7 +3,7 @@ using UnityEngine;
 public abstract class ShopItemData : ScriptableObject
 {
     [Header("Base Info")]
-    public string id;
+    public int id;
     public string itemName;
     public Sprite icon;
     public int price;

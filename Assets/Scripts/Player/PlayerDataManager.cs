@@ -200,7 +200,6 @@ public class PlayerDataManager : MonoBehaviour
     public void SyncPlayerFromServer()
     {
         int playerId = PlayerPrefs.GetInt("PlayerId");
-        Debug.Log("PLAYER ID: " + playerId);
         StartCoroutine(PlayerAPI.Instance.SyncPlayerFromServer(
             playerId,
             onSuccess: playerRes =>

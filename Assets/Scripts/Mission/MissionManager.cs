@@ -38,7 +38,7 @@ public class MissionManager : MonoBehaviour
         }
     }
 
-    public void CollectItem(string itemId)
+    public void CollectItem(int itemId)
     {
         foreach (var mission in activeMissions)
         {

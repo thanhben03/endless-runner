@@ -1,18 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System;
 
-public class PlayerItemModel : MonoBehaviour
+[Serializable]
+public class PlayerItemModel
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public int itemId;
+    public ItemCategory category;
+    public int quantity;
 }
