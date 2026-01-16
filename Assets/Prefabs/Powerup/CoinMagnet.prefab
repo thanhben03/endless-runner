@@ -48,6 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   magnetEff: {fileID: 7897872004870067543}
+  item: {fileID: 11400000, guid: f2ecbc19433477c44935df6bd46b7702, type: 2}
 --- !u!135 &542681996507963493
 SphereCollider:
   m_ObjectHideFlags: 0

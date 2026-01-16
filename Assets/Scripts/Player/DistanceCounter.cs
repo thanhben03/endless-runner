@@ -26,6 +26,7 @@ public class DistanceCounter : MonoBehaviour
         if (timer >= UPDATE_INTERVAL && playerMovement.forwardSpeed > 0)
         {
             distance = Mathf.Max(0, transform.position.z - startZ ) / 3;
+            MissionManager.Instance.AddDistance(Mathf.RoundToInt(distance));
             timer = 0f;
 
             int roundedDistance = Mathf.FloorToInt(distance);

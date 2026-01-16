@@ -7,10 +7,14 @@ public class MainMenuUI : MonoBehaviour
 {
     public Button playBtn;
     public Button shopBtn;
+    public Button settingBtn;
+    public Button missionBtn;
+    public GameObject missionPopup;
     void Start()
     {
         playBtn.onClick.AddListener(StartGame);
         shopBtn.onClick.AddListener(LoadShop);
+        missionBtn.onClick.AddListener(LoadMission);
         AudioManager.Instance.PlayMusic(AudioManager.Instance.menuMusic);
 
     }
@@ -30,5 +34,11 @@ public class MainMenuUI : MonoBehaviour
     {
         GameMenuControl.Instance.LoadShop();
 
+    }
+
+    private void LoadMission()
+    {
+
+        missionPopup.SetActive(true);
     }
 }

@@ -109,18 +109,23 @@ public class PlayerDataManager : MonoBehaviour
         PlayerPrefs.Save();
     }
 
-    public void MinusCoint(int amount)
+    public void SaveCurrency(CurrencyType type, int amount)
     {
-        totalCoin -= amount;
-        PlayerPrefs.SetInt("TOTAL_COIN", totalCoin);
-        PlayerPrefs.Save();
-    }
+        if (amount <= 0)
+            return;
+        switch (type)
+        {
+           
+            case CurrencyType.Coin:
+                totalCoin += amount;
+                PlayerPrefs.SetInt("TOTAL_COIN", totalCoin);
+                break;
 
-    public void MinusGold(int amount)
-    {
-        totalGold -= amount;
-        PlayerPrefs.SetInt("TOTAL_GOLD", totalGold);
-        PlayerPrefs.Save();
+            case CurrencyType.Gold:
+                totalGold += amount;
+                PlayerPrefs.SetInt("TOTAL_GOLD", totalGold);
+                break;
+        }
     }
 
     public bool TrySpend(CurrencyType type, int amount)
