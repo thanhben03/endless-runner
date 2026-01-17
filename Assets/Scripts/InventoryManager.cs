@@ -68,6 +68,11 @@ public class InventoryManager : MonoBehaviour
 
     public void ApplyItem(PlayerItemModel item)
     {
+        if (inventory.ContainsKey(item.itemId))
+        {
+            inventory[item.itemId].quantity++;
+            return;
+        }
         inventory[item.itemId] = item;
     }
 
@@ -92,7 +97,7 @@ public class InventoryManager : MonoBehaviour
         {
             return false;
         }
-        StartCoroutine(InventoryAPI.Instance.SycnInventory(
+        StartCoroutine(InventoryAPI.Instance.UpdateInventoryItem(
             playerId,
             itemId,
             new UpdateInventoryItem

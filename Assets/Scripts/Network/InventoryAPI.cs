@@ -31,7 +31,23 @@ public class InventoryAPI : MonoBehaviour
         );
     }
 
-    public IEnumerator SycnInventory(
+    public IEnumerator BuyItem (
+        int playerId,
+        AddInventoryItemRequest req,
+        Action<AddInventoryResponse> onSuccess,
+        Action<string> onError
+    )
+    {
+        Debug.Log("AddInventory Request: " + req.itemType + "/ " + req.itemId +" / " + req.itemId);
+        yield return ApiClient.Post<AddInventoryItemRequest, AddInventoryResponse>(
+            $"player/{playerId}/inventory/buy",
+            req,
+            res => onSuccess?.Invoke(res),
+            onError
+        );
+    }
+
+    public IEnumerator UpdateInventoryItem(
         int playerId,
         int itemId,
         UpdateInventoryItem req,

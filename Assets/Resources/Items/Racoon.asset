@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dd9263ffad7c52488d86c2e86b101a5, type: 3}
   m_Name: Racoon
   m_EditorClassIdentifier: 
-  id: 2
+  id: 1000
   itemName: Racoon
   icon: {fileID: 21300056, guid: d5a1fda60c3eebf4f874a11a7268db53, type: 3}
   price: 1

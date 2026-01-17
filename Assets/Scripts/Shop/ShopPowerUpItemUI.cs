@@ -28,16 +28,36 @@ public class ShopPowerUpItemUI : ShopItem
             return;
         }
 
-        PlayerItemModel playerItemModel = new PlayerItemModel
+        PlayerItemModel playerItemModel = new()
         {
             category = ItemCategory.PowerUp,
             itemId = data.id,
             quantity = 1
         };
+        int playerId = PlayerPrefs.GetInt("PlayerId", -1);
+        StartCoroutine(InventoryAPI.Instance.BuyItem(
+            playerId,
+            new AddInventoryItemRequest
+            {
+                itemId = playerItemModel.itemId,
+                itemType = playerItemModel.category,
+                quantity = playerItemModel.quantity,
+                price = data.price,
+                currency = data.currency
+            },
+            onSuccess: res =>
+            {
+                InventoryManager.Instance.ApplyItem(playerItemModel);
+                UpdateQtyItem();
+                ShopManager.Instance.UpdateCurrency();
+            },
+            onError: message =>
+            {
+                Debug.LogError("ERROW WHEN BUY PU ITEM: " + message);
+            }
+            ));
 
-        InventoryManager.Instance.ApplyItem(playerItemModel);
-        UpdateQtyItem();
-        ShopManager.Instance.UpdateCurrency();
+        
     }
 
 }

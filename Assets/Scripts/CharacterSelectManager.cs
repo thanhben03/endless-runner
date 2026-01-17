@@ -10,10 +10,37 @@ public class CharacterSelectManager : MonoBehaviour
     private int currentIndex = 0;
     private GameObject currentSelectObj;
 
+
+    private void OnEnable()
+    {
+        if (InventoryManager.Instance != null)
+        {
+            Init();
+        }
+    }
+
     void Start()
     {
+        InventoryManager.Instance.OnLoadedInventory += Init;
+    }
+
+
+
+    private void OnDisable()
+    {
+        InventoryManager.Instance.OnLoadedInventory -= Init;
+
+    }
+
+    void Init()
+    {
         UpdateUI();
-        selectableCharacters = characters.FindAll(item => InventoryManager.Instance.HasItem(item.id));
+        selectableCharacters = characters.FindAll(item =>
+        {
+            Debug.Log("FIND CHARACTER ID: " + item.id);
+            return InventoryManager.Instance.HasItem(item.id);
+            
+        });
     }
 
 
